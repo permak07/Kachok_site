@@ -1,0 +1,199 @@
+:root {
+  --hed-bg: #232323;
+  --hed-txt: #b8b8b8;
+  --hed-txt-hov: #ffffff;
+  --hed-acc: #ccff00;
+  --hed-rad: 24px;
+  --hed-max-w: 1200px;
+}
+
+.heder {
+  padding: 16px 20px 0;
+}
+
+.heder__bar {
+  max-width: var(--hed-max-w);
+  margin: 0 auto;
+  min-height: 64px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hed-bg);
+  border-radius: var(--hed-rad);
+  position: relative;
+}
+
+.heder__nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.heder__lnk {
+  color: var(--hed-txt);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.heder__lnk:hover,
+.heder__lnk.is-active {
+  color: var(--hed-acc);
+}
+
+.heder__logo,
+.heder__logo-mob {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.heder__logo-mob {
+  display: none;
+}
+
+.hed-logo {
+  display: block;
+  width: 48px;
+  height: auto;
+  object-fit: contain;
+}
+
+.heder__burg {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.heder__burg span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+.heder__ovrl {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.heder__ovrl[hidden] {
+  display: none;
+}
+
+.heder__pnl {
+  width: min(100%, 400px);
+  height: 100%;
+  margin-left: auto;
+  padding: 24px;
+  background: #d9d9d9;
+}
+
+.heder__pnl-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+}
+
+.heder__pnl-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.heder__pnl-brand .hed-logo {
+  width: 40px;
+}
+
+.heder__cls {
+  border: none;
+  background: transparent;
+  color: #1a1a1a;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.heder__pnl-ttl {
+  margin: 0 0 20px;
+  padding-bottom: 8px;
+  border-bottom: 4px solid #1a1a1a;
+  font-size: 22px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.heder__pnl-lst {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.heder__pnl-lst a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.heder__pnl-lst a::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.heder__pnl-lst a.is-active {
+  color: #e85d3b;
+}
+
+body.menu-opn {
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .heder__bar {
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .heder__logo-mob {
+    display: flex;
+  }
+
+  .heder__nav {
+    display: none;
+  }
+
+  .heder__burg {
+    display: flex;
+  }
+}
