@@ -5,7 +5,7 @@ class GlobalResult(Base):
     __tablename__="global_result"
 
     id=Column(Integer,primary_key=True,index=True)
-    user_id=Column(Integer,ForeignKey("user.id"),nullable=False)
+    user_id=Column(Integer,ForeignKey("users.id"),nullable=False)
     category_id=Column(Integer,ForeignKey("category.id"),nullable=False)
     value=Column(Float, nullable=False)
     date=Column(DateTime,server_default=func.now())

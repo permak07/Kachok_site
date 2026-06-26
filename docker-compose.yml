@@ -5,9 +5,10 @@ services:
     environment:
       POSTGRES_USER: kachok_user
       POSTGRES_PASSWORD: kachok_pass
+
       POSTGRES_DB: kachok_db
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
