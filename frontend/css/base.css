@@ -1,0 +1,26 @@
+:root {
+  --pg-bg: #e8ecef;
+  --fnt: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fnt);
+  background: var(--pg-bg);
+  color: #1a1a1a;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pg {
+  min-height: 60vh;
+}
