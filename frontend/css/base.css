@@ -1,6 +1,18 @@
 :root {
   --pg-bg: #e8ecef;
   --fnt: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --site-max: 1600px;
+  --site-side: 12px;
+}
+
+.site-wrap,
+.idx,
+.futer,
+#site-mob-fut .mob-fut {
+  max-width: var(--site-max);
+  width: calc(100% - 2 * var(--site-side));
+  margin-left: auto;
+  margin-right: auto;
 }
 
 *,

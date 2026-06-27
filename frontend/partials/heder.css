@@ -2,16 +2,15 @@
   --hed-bg: #232323;
   --hed-txt: #b8b8b8;
   --hed-acc: #ccff00;
-  --hed-rad: 24px;
-  --hed-max-w: 1200px;
+  --hed-rad: 20px;
 }
 
 .heder {
-  padding: 16px 20px 0;
+  padding: 16px var(--site-side) 0;
 }
 
 .heder__bar {
-  max-width: var(--hed-max-w);
+  max-width: var(--site-max);
   margin: 0 auto;
   min-height: 64px;
   padding: 0 32px;
@@ -25,7 +24,7 @@
 .heder__nav {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 56px;
 }
 
 .heder__lnk {

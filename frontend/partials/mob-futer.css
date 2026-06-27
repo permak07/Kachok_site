@@ -16,7 +16,7 @@
 }
 
 #site-mob-fut .mob-fut {
-  margin: 24px var(--mob-side-pad) 20px;
+  margin: 24px auto 20px;
 }
 
 #hed-mob-fut {
@@ -147,6 +147,11 @@
   #site-futer {
     display: none;
   }
+
+  #site-mob-fut .mob-fut {
+    width: calc(100% - 2 * var(--mob-side-pad));
+    margin: 24px auto 20px;
+  }
 }
 
 @media (min-width: 812px) {
@@ -162,7 +167,7 @@
   }
 
   #site-mob-fut .mob-fut {
-    margin: 16px var(--mob-side-pad);
+    margin: 16px auto;
   }
 
   #hed-mob-fut {
