@@ -15,14 +15,27 @@ function initHed() {
   const ovrl = document.querySelector('.heder__ovrl');
   if (!burg || !ovrl) return;
 
-  burg.addEventListener('click', () => {
-    ovrl.hidden = false;
+  const opn = () => {
+    ovrl.classList.add('is-opn');
+    ovrl.setAttribute('aria-hidden', 'false');
+    burg.setAttribute('aria-expanded', 'true');
+    burg.setAttribute('aria-label', 'Закрыть меню');
     document.body.classList.add('menu-opn');
-  });
+  };
 
-  clsBtn?.addEventListener('click', () => {
-    ovrl.hidden = true;
+  const cls = () => {
+    ovrl.classList.remove('is-opn');
+    ovrl.setAttribute('aria-hidden', 'true');
+    burg.setAttribute('aria-expanded', 'false');
+    burg.setAttribute('aria-label', 'Открыть меню');
     document.body.classList.remove('menu-opn');
+  };
+
+  burg.addEventListener('click', opn);
+  clsBtn?.addEventListener('click', cls);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && ovrl.classList.contains('is-opn')) cls();
   });
 }
 
