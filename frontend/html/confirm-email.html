@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подтверждение аккаунта — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../partials/heder.css">
+  <link rel="stylesheet" href="../partials/futer.css">
+  <link rel="stylesheet" href="../partials/mob-futer.css">
+</head>
+<body data-page="confirm-email">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="cnf-page">
+      <img class="cnf__logo" src="../images/kachki-logo-login.png" alt="Качки в Иркутске">
+
+      <div class="cnf-grid">
+        <h1 class="cnf__ttl">Подтверждение Аккаунта</h1>
+        <p class="cnf__desc">На вашу почту придет код, введите его</p>
+
+        <div class="cnf__box">
+          <div class="cnf__code-wrap">
+            <input class="cnf__code" id="cnf-code" type="text" inputmode="numeric" placeholder="Ввести код" autocomplete="one-time-code">
+            <a class="cnf__back" href="login.html" aria-label="Назад">←</a>
+          </div>
+          <div class="cnf__btns">
+            <button class="cnf__btn cnf__btn--dark" type="button" id="cnf-ok">Подтвердить</button>
+            <button class="cnf__btn cnf__btn--org" type="button" id="cnf-resend">Еще?</button>
+          </div>
+        </div>
+
+        <div class="cnf__chart">
+          <img src="../images/zim.png" alt="Жим">
+        </div>
+      </div>
+
+      <div class="cnf__foot">
+        <a href="login.html">Вернуться ко входу</a>
+        <p class="cnf__hint">Проверьте папку спам</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../js/layout.js"></script>
+  <script>
+    document.getElementById('cnf-ok')?.addEventListener('click', () => {
+      location.href = 'profile.html';
+    });
+    document.getElementById('cnf-resend')?.addEventListener('click', () => {
+      alert('Код отправлен повторно (заглушка)');
+    });
+  </script>
+</body>
+</html>

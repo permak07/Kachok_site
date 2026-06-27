@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../partials/heder.css">
+  <link rel="stylesheet" href="../partials/futer.css">
+  <link rel="stylesheet" href="../partials/mob-futer.css">
+  <style>
+    .prof {
+      max-width: 640px;
+      margin: 48px auto;
+      padding: 0 var(--site-side);
+      text-align: center;
+    }
+
+    .prof__out {
+      margin-top: 20px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #232323;
+      color: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body data-page="profile">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="prof">
+      <h1>Профиль</h1>
+      <button class="prof__out" type="button" id="prof-out">Выйти</button>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../js/layout.js"></script>
+  <script>
+    document.getElementById('prof-out')?.addEventListener('click', () => {
+      location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
