@@ -1,7 +1,6 @@
 :root {
   --hed-bg: #232323;
   --hed-txt: #b8b8b8;
-  --hed-txt-hov: #ffffff;
   --hed-acc: #ccff00;
   --hed-rad: 24px;
   --hed-max-w: 1200px;
@@ -21,7 +20,6 @@
   justify-content: center;
   background: var(--hed-bg);
   border-radius: var(--hed-rad);
-  position: relative;
 }
 
 .heder__nav {
@@ -88,101 +86,131 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.5);
 }
 
 .heder__ovrl[hidden] {
   display: none;
 }
 
-.heder__pnl {
-  width: min(100%, 400px);
+.heder__mob {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
-  margin-left: auto;
-  padding: 24px;
-  background: #d9d9d9;
+  background: #cccbcb;
 }
 
-.heder__pnl-top {
+.heder__mob-hdr {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 36px;
+  flex-shrink: 0;
+  padding: 14px 18px;
+  background: var(--hed-bg);
 }
 
-.heder__pnl-brand {
+.heder__mob-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #1a1a1a;
-  font-size: 13px;
-  font-weight: 900;
-  text-transform: uppercase;
+  gap: 10px;
 }
 
-.heder__pnl-brand .hed-logo {
-  width: 40px;
+.heder__mob-brand .hed-logo {
+  width: 44px;
+}
+
+.hed-mob-txt {
+  display: block;
+  width: 130px;
+  height: auto;
 }
 
 .heder__cls {
   border: none;
   background: transparent;
-  color: #1a1a1a;
-  font-size: 32px;
+  color: #ffffff;
+  font-size: 36px;
   line-height: 1;
   cursor: pointer;
+  padding: 0 4px;
 }
 
-.heder__pnl-ttl {
-  margin: 0 0 20px;
-  padding-bottom: 8px;
-  border-bottom: 4px solid #1a1a1a;
-  font-size: 22px;
+.heder__mob-body {
+  flex: 1;
+  padding: 28px 22px 16px;
+  overflow-y: auto;
+}
+
+.heder__mob-ttl {
+  margin: 0 0 22px;
+  padding-bottom: 10px;
+  border-bottom: 5px solid #1a1a1a;
+  max-width: 85%;
+  font-size: 24px;
   font-weight: 900;
   text-transform: uppercase;
   color: #1a1a1a;
+  letter-spacing: 0.02em;
 }
 
-.heder__pnl-lst {
+.heder__mob-lst {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
 }
 
-.heder__pnl-lst a {
+.heder__mob-lst a {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 18px;
+  gap: 14px;
+  font-size: 20px;
   font-weight: 800;
   text-transform: uppercase;
   color: #1a1a1a;
+  letter-spacing: 0.02em;
 }
 
-.heder__pnl-lst a::before {
+.heder__mob-lst a::before {
   content: '';
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: #1a1a1a;
   flex-shrink: 0;
 }
 
-.heder__pnl-lst a.is-active {
+.heder__mob-lst a.is-active {
   color: #e85d3b;
+}
+
+.heder__mob-sep {
+  margin-top: 32px;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+}
+
+#hed-mob-fut {
+  flex-shrink: 0;
 }
 
 body.menu-opn {
   overflow: hidden;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 811px) {
+  .heder {
+    padding: 16px 14px 0;
+  }
+
   .heder__bar {
     justify-content: space-between;
+    max-width: 100%;
     padding: 0 20px;
+    border-radius: 20px;
   }
 
   .heder__logo-mob {
@@ -195,5 +223,37 @@ body.menu-opn {
 
   .heder__burg {
     display: flex;
+  }
+}
+
+@media (max-width: 811px) and (orientation: landscape) {
+  .heder {
+    padding: 12px 14px 0;
+  }
+
+  .heder__bar {
+    min-height: 56px;
+    padding: 0 24px;
+  }
+
+  .hed-logo {
+    width: 42px;
+  }
+
+  .heder__mob-body {
+    padding: 20px 14px 12px;
+  }
+
+  .heder__mob-ttl {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .heder__mob-lst {
+    gap: 16px;
+  }
+
+  .heder__mob-lst a {
+    font-size: 17px;
   }
 }
