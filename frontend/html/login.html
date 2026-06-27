@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../partials/heder.css">
+  <link rel="stylesheet" href="../partials/futer.css">
+  <link rel="stylesheet" href="../partials/mob-futer.css">
+</head>
+<body data-page="login">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="auth">
+      <div class="auth__card">
+        <img class="auth__logo" src="../images/kachki-logo-login.png" alt="Качки в Иркутске">
+
+        <form class="auth__form auth__form--login" action="#" method="post" novalidate>
+          <div class="auth__fld">
+            <label class="auth__lbl" for="login-email">Введите вашу почту</label>
+            <div class="auth__in-wrap">
+              <img class="auth__ico" src="../images/icon-mail.svg" alt="" aria-hidden="true">
+              <input class="auth__in" id="login-email" name="email" type="email" placeholder="platoxa@mail.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="auth__fld">
+            <div class="auth__lbl-row">
+              <label class="auth__lbl" for="login-pass">Введите пароль</label>
+              <a class="auth__lnk" href="#">Забыл пароль?</a>
+            </div>
+            <div class="auth__in-wrap">
+              <img class="auth__ico" src="../images/icon-lock.svg" alt="" aria-hidden="true">
+              <input class="auth__in" id="login-pass" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+              <button class="auth__eye" type="button" aria-label="Показать пароль">
+                <img class="auth__ico" src="../images/icon-eye.svg" alt="">
+              </button>
+            </div>
+          </div>
+
+          <button class="auth__btn" type="button" id="login-go">Войти →</button>
+        </form>
+
+        <div class="auth__sep"><span>ИЛИ ВОЙДИ ЧЕРЕЗ</span></div>
+
+        <div class="auth__alts">
+          <a class="auth__alt" href="#">
+            <img class="auth__alt-ico" src="../images/icon-google.svg" alt="">
+            Google
+          </a>
+        </div>
+
+        <p class="auth__foot">
+          Нету аккаунта? <a class="auth__lnk" href="register.html">Создай тут</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<header class="heder">
+  <div class="heder__bar">
+    <a class="heder__logo-mob" href="index.html" aria-label="На главную">
+      <img class="hed-logo" src="../images/logo.png" alt="">
+    </a>
+
+    <button
+      class="heder__burg"
+      type="button"
+      aria-label="Открыть меню"
+      aria-expanded="false"
+      aria-controls="hed-menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="heder__nav" id="hed-menu" aria-label="Основная навигация">
+      <a class="heder__lnk" href="indicators.html" data-nav="indicators">Показатели</a>
+      <a class="heder__lnk" href="leaders.html" data-nav="leaders">Лидеры</a>
+
+      <a class="heder__logo" href="index.html" aria-label="На главную">
+        <img class="hed-logo" src="../images/logo.png" alt="">
+      </a>
+
+      <a class="heder__lnk" href="exercises.html" data-nav="exercises">Упражнения</a>
+      <a class="heder__lnk" href="login.html">Войти</a>
+    </nav>
+  </div>
+
+  <div class="heder__ovrl" aria-hidden="true">
+    <div class="heder__mob">
+      <div class="heder__mob-hdr">
+        <a class="heder__mob-brand" href="index.html">
+          <img class="hed-logo" src="../images/logo.png" alt="">
+          <img class="hed-mob-txt" src="../images/footer-logo-text.png" alt="Качки в Иркутске">
+        </a>
+        <button class="heder__cls" type="button" aria-label="Закрыть меню">&times;</button>
+      </div>
+
+      <div class="heder__mob-body">
+        <p class="heder__mob-ttl">Меню качка</p>
+
+        <ul class="heder__mob-lst">
+          <li><a href="indicators.html" data-nav="indicators">Показатели</a></li>
+          <li><a href="leaders.html" data-nav="leaders">Лидеры</a></li>
+          <li><a href="exercises.html" data-nav="exercises">Упражнения</a></li>
+          <li><a href="login.html">Войти</a></li>
+        </ul>
+
+        <div class="heder__mob-sep"></div>
+      </div>
+
+      <div id="hed-mob-fut"></div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../partials/heder.css">
+  <link rel="stylesheet" href="../partials/futer.css">
+  <link rel="stylesheet" href="../partials/mob-futer.css">
+</head>
+<body data-page="register">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="auth">
+      <div class="auth__card">
+        <img class="auth__logo" src="../images/kachki-logo-login.png" alt="Качки в Иркутске">
+
+        <form class="auth__form auth__form--reg" action="#" method="post" novalidate>
+          <div class="auth__row">
+            <div class="auth__fld">
+              <label class="auth__lbl" for="reg-name">Введите ваше имя</label>
+              <div class="auth__in-wrap">
+                <img class="auth__ico" src="../images/icon-user.svg" alt="" aria-hidden="true">
+                <input class="auth__in" id="reg-name" name="first_name" type="text" placeholder="Platoxa" autocomplete="given-name" required>
+              </div>
+            </div>
+            <div class="auth__fld">
+              <label class="auth__lbl" for="reg-surname">Введите вашу фамилию</label>
+              <div class="auth__in-wrap">
+                <img class="auth__ico" src="../images/icon-user.svg" alt="" aria-hidden="true">
+                <input class="auth__in" id="reg-surname" name="last_name" type="text" placeholder="Zhuman" autocomplete="family-name" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="auth__fld">
+            <label class="auth__lbl" for="reg-email">Введите вашу почту</label>
+            <div class="auth__in-wrap">
+              <img class="auth__ico" src="../images/icon-mail.svg" alt="" aria-hidden="true">
+              <input class="auth__in" id="reg-email" name="email" type="email" placeholder="platoxa@mail.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="auth__fld">
+            <label class="auth__lbl" for="reg-pass">Введите ваш пароль</label>
+            <div class="auth__in-wrap">
+              <img class="auth__ico" src="../images/icon-lock.svg" alt="" aria-hidden="true">
+              <input class="auth__in" id="reg-pass" name="password" type="password" placeholder="••••••••" autocomplete="new-password" required>
+              <button class="auth__eye" type="button" aria-label="Показать пароль">
+                <img class="auth__ico" src="../images/icon-eye.svg" alt="">
+              </button>
+            </div>
+          </div>
+
+          <div class="auth__fld">
+            <label class="auth__lbl" for="reg-pass2">Подтвердите пароль</label>
+            <div class="auth__in-wrap">
+              <img class="auth__ico" src="../images/icon-lock.svg" alt="" aria-hidden="true">
+              <input class="auth__in" id="reg-pass2" name="password_confirm" type="password" placeholder="••••••••" autocomplete="new-password" required>
+              <button class="auth__eye" type="button" aria-label="Показать пароль">
+                <img class="auth__ico" src="../images/icon-eye.svg" alt="">
+              </button>
+            </div>
+          </div>
+
+          <button class="auth__btn" type="submit">Зарегистрироваться →</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

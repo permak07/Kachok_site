@@ -1,0 +1,172 @@
+:root {
+  --fut-bg: #232323;
+  --fut-txt: #ffffff;
+  --fut-muted: #9a9a9a;
+  --fut-acc: #ccff00;
+  --fut-rad: 24px;
+}
+
+.futer {
+  margin: 40px auto 20px;
+  padding: 36px 32px 20px;
+  background: var(--fut-bg);
+  color: var(--fut-txt);
+  border-radius: var(--fut-rad);
+}
+
+.futer__top {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr) auto;
+  gap: 32px;
+}
+
+.futer__logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.fut-logo {
+  display: block;
+  width: 56px;
+  height: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.fut-logo-txt {
+  display: block;
+  width: 180px;
+  height: auto;
+}
+
+.futer__desc {
+  margin: 0;
+  max-width: 280px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fut-muted);
+}
+
+.futer__hd {
+  margin: 0 0 16px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fut-muted);
+}
+
+.futer__lnks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.futer__lnks a {
+  font-size: 14px;
+  color: var(--fut-txt);
+  transition: color 0.2s ease;
+}
+
+.futer__lnks a:hover,
+.futer__lnks a.is-active {
+  color: var(--fut-acc);
+}
+
+.futer__soc-lst {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.futer__soc-lst a {
+  display: block;
+  line-height: 0;
+  transition: opacity 0.2s ease;
+}
+
+.futer__soc-lst a:hover {
+  opacity: 0.8;
+}
+
+.futer__soc-lst img {
+  display: block;
+  width: 64px;
+  height: 64px;
+}
+
+.futer__partn {
+  margin: 28px 0 0;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #111111;
+  border-radius: 999px;
+}
+
+.futer__partn-lbl {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.futer__partn-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #2a2a2a;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fut-txt);
+  transition: background 0.2s ease;
+}
+
+.futer__partn-btn:hover {
+  background: #3a3a3a;
+}
+
+.futer__btm {
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #333333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.futer__copy {
+  margin: 0;
+  font-size: 12px;
+  color: var(--fut-muted);
+}
+
+.futer__legal {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.futer__legal a {
+  font-size: 12px;
+  color: var(--fut-muted);
+  transition: color 0.2s ease;
+}
+
+.futer__legal a:hover {
+  color: var(--fut-txt);
+}
