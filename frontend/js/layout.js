@@ -54,4 +54,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPart('site-mob-fut', 'mob-futer.html');
   await loadPart('hed-mob-fut', 'mob-futer.html');
   markNav();
+  await api.updateNav();
 });

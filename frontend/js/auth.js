@@ -1,5 +1,25 @@
-function goProfile() {
-  window.location.href = 'profile.html';
+function showErr(form, msg) {
+  let el = form.querySelector('.auth__err');
+  if (!el) {
+    el = document.createElement('p');
+    el.className = 'auth__err';
+    form.querySelector('.auth__btn')?.before(el);
+  }
+  el.textContent = msg;
+  el.hidden = !msg;
+}
+
+function showCnfErr(msg) {
+  const box = document.querySelector('.cnf__box');
+  if (!box) return;
+  let el = box.querySelector('.auth__err');
+  if (!el) {
+    el = document.createElement('p');
+    el.className = 'auth__err';
+    box.prepend(el);
+  }
+  el.textContent = msg;
+  el.hidden = !msg;
 }
 
 document.querySelectorAll('.auth__eye').forEach((btn) => {
@@ -10,15 +30,68 @@ document.querySelectorAll('.auth__eye').forEach((btn) => {
   });
 });
 
-document.getElementById('login-go')?.addEventListener('click', goProfile);
+async function doLogin(form) {
+  showErr(form, '');
+  try {
+    await api.signIn(form.email.value.trim(), form.password.value);
+    location.href = 'profile.html';
+  } catch (e) {
+    showErr(form, e.message);
+  }
+}
+
+document.getElementById('login-go')?.addEventListener('click', () => {
+  const form = document.querySelector('.auth__form--login');
+  if (form) doLogin(form);
+});
 
 document.querySelector('.auth__form--login')?.addEventListener('submit', (e) => {
   e.preventDefault();
-  goProfile();
+  doLogin(e.target);
 });
 
-document.querySelector('.auth__form--reg')?.addEventListener('submit', (e) => {
+document.querySelector('.auth__form--reg')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = e.target.email.value.trim() || 'test@mail.com';
-  window.location.href = `confirm-email.html?email=${encodeURIComponent(email)}`;
+  const form = e.target;
+  showErr(form, '');
+
+  if (form.password.value !== form.password_confirm.value) {
+    showErr(form, 'Пароли не совпадают');
+    return;
+  }
+
+  const email = form.email.value.trim();
+  try {
+    await api.registerUser(
+      form.first_name.value,
+      form.last_name.value,
+      email,
+      form.password.value,
+    );
+    location.href = `confirm-email.html?email=${encodeURIComponent(email)}`;
+  } catch (err) {
+    showErr(form, err.message);
+  }
+});
+
+document.getElementById('cnf-ok')?.addEventListener('click', async () => {
+  const email = new URLSearchParams(location.search).get('email');
+  const code = document.getElementById('cnf-code')?.value.trim();
+
+  if (!email) {
+    alert('Email не указан. Вернитесь к регистрации.');
+    return;
+  }
+  if (!code) {
+    alert('Введите код');
+    return;
+  }
+
+  showCnfErr('');
+  try {
+    await api.confirmUser(email, code);
+    location.href = 'login.html';
+  } catch (e) {
+    showCnfErr(e.message);
+  }
 });
