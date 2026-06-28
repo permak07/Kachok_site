@@ -210,6 +210,10 @@ body.menu-opn .heder__burg span:nth-child(3) {
   color: #e85d3b;
 }
 
+.heder__mob-lst li:has(a[hidden]) {
+  display: none;
+}
+
 .heder__mob-sep {
   margin-top: 32px;
   height: 3px;

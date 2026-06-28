@@ -16,6 +16,12 @@
       text-align: center;
     }
 
+    .prof__info {
+      margin: 12px 0 0;
+      font-size: 14px;
+      color: #555;
+    }
+
     .prof__out {
       margin-top: 20px;
       padding: 8px 16px;
@@ -36,17 +42,15 @@
   <main class="pg">
     <div class="prof">
       <h1>Профиль</h1>
+      <p class="prof__info" id="prof-info"></p>
       <button class="prof__out" type="button" id="prof-out">Выйти</button>
     </div>
   </main>
 
   <div id="site-futer"></div>
   <div id="site-mob-fut"></div>
+  <script src="../js/api.js"></script>
   <script src="../js/layout.js"></script>
-  <script>
-    document.getElementById('prof-out')?.addEventListener('click', () => {
-      location.href = 'index.html';
-    });
-  </script>
+  <script src="../js/profile.js"></script>
 </body>
 </html>
