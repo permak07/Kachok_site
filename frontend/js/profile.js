@@ -1,15 +1,18 @@
-//  проверяет, что пользователь залогинен, показывает юзернаме 
-// и почту, по «выйти» вызывает api.signOut() и уводит на главную
+function profName(username) {
+  const [a, b] = username.split('_');
+  if (!b) return username;
+  return `${a.charAt(0).toUpperCase()}${a.slice(1)} ${b.charAt(0).toUpperCase()}.`;
+}
 
 async function initProfile() {
-  const user = await api.requireUser();
-  if (!user) {
-    location.href = 'login.html';
-    return;
-  }
-
-  const info = document.getElementById('prof-info');
-  if (info) info.textContent = `${user.username} · ${user.email}`;
+  // const user = await api.requireUser();
+  // if (!user) {
+  //   location.href = 'login.html';
+  //   return;
+  // }
+  const user = { username: 'georgiy_v' };
+  const el = document.getElementById('prof-name');
+  if (el) el.textContent = profName(user.username);
 }
 
 initProfile();
