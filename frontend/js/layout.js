@@ -43,17 +43,13 @@ function initHed() {
 
   const opn = () => {
     ovrl.classList.add('is-opn');
-    ovrl.setAttribute('aria-hidden', 'false');
     burg.setAttribute('aria-expanded', 'true');
-    burg.setAttribute('aria-label', 'Закрыть меню');
     document.body.classList.add('menu-opn');
   };
 
   const cls = () => {
     ovrl.classList.remove('is-opn');
-    ovrl.setAttribute('aria-hidden', 'true');
     burg.setAttribute('aria-expanded', 'false');
-    burg.setAttribute('aria-label', 'Открыть меню');
     document.body.classList.remove('menu-opn');
   };
 
