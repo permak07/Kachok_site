@@ -7,11 +7,8 @@ function showSetMsg(text, isErr) {
 }
 
 async function initSettings() {
-  const user = await api.requireUser();
-  if (!user) {
-    location.href = 'login.html';
-    return;
-  }
+  const user = await initProfShell();
+  if (!user) return;
 
   try {
     const profile = await api.getProfile();
@@ -25,7 +22,7 @@ async function initSettings() {
   }
 }
 
-initSettings();
+document.addEventListener('DOMContentLoaded', initSettings);
 
 document.getElementById('prof-set-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -46,9 +43,4 @@ document.getElementById('prof-set-form')?.addEventListener('submit', async (e) =
   } catch (err) {
     showSetMsg(err.message, true);
   }
-});
-
-document.getElementById('prof-out')?.addEventListener('click', async () => {
-  await api.signOut();
-  location.href = 'index.html';
 });

@@ -13,11 +13,8 @@ function profMeta(profile) {
 }
 
 async function initProfile() {
-  const user = await api.requireUser();
-  if (!user) {
-    location.href = 'login.html';
-    return;
-  }
+  const user = await initProfShell();
+  if (!user) return;
 
   let profile = user;
   try {
@@ -38,9 +35,4 @@ async function initProfile() {
   }
 }
 
-initProfile();
-
-document.getElementById('prof-out')?.addEventListener('click', async () => {
-  await api.signOut();
-  location.href = 'index.html';
-});
+document.addEventListener('DOMContentLoaded', initProfile);

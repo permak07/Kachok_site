@@ -10,22 +10,12 @@
   <link rel="stylesheet" href="../partials/futer.css">
   <link rel="stylesheet" href="../partials/mob-futer.css">
 </head>
-<body data-page="profile">
+<body data-page="profile" data-prof-tab="overview">
   <div id="site-heder"></div>
 
   <main class="pg">
     <div class="prof-wrap">
-      <aside class="prof-side">
-        <p class="prof-side__ttl">Меню профиля</p>
-        <nav class="prof-side__nav" aria-label="Меню профиля">
-          <a class="prof-side__lnk is-active" href="profile.html">Обзор</a>
-          <a class="prof-side__lnk" href="profile-settings.html">Настройки</a>
-          <a class="prof-side__lnk" href="#">Достижения</a>
-          <a class="prof-side__lnk" href="#">История</a>
-          <a class="prof-side__lnk prof-side__lnk--sup" href="#">Поддержка</a>
-          <button class="prof-side__lnk" type="button" id="prof-out">Выйти</button>
-        </nav>
-      </aside>
+      <aside class="prof-side" id="prof-side"></aside>
 
       <div class="prof-main">
         <header class="prof-head">
@@ -115,6 +105,7 @@
   <div id="site-mob-fut"></div>
   <script src="../js/api.js"></script>
   <script src="../js/layout.js"></script>
+  <script src="../js/profile-common.js"></script>
   <script src="../js/profile.js"></script>
 </body>
 </html>
