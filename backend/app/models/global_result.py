@@ -9,3 +9,5 @@ class GlobalResult(Base):
     category_id=Column(Integer,ForeignKey("category.id"),nullable=False)
     value=Column(Float, nullable=False)
     date=Column(DateTime,server_default=func.now())
+    approved_at = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
