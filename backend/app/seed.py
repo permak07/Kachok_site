@@ -4,6 +4,7 @@ from app.core.database import AsyncSessionLocal
 from app.models.category import Category
 from app.models.global_result import GlobalResult
 from app.utils.security import hash_password
+from app.models.user import User
 from datetime import datetime
 
 CATEGORIES=[
@@ -13,31 +14,12 @@ CATEGORIES=[
     {"name": "На раз", "slug": "one_rep"},
     {"name": "Тоннаж", "slug": "tonnage"}
 ]
+
 FAKE_USERS = [
     {"username": "ivan_p", "email": "ivan@test.com", "gym_name": "PLATOXA GYM", "weight_class": 93},
     {"username": "max_s", "email": "max@test.com", "gym_name": "АТЛАНТ", "weight_class": 83},
     {"username": "dima_k", "email": "dima@test.com", "gym_name": "PLATOXA GYM", "weight_class": 105},
     {"username": "sasha_m", "email": "sasha@test.com", "gym_name": "Iron Gym", "weight_class": 74},
-]
-
-FAKE_RESULTS = [
-    # Жим 
-    {"user_id": 4, "category_id": 1, "value": 160, "date": "2026-06-10"},
-    {"user_id": 2, "category_id": 1, "value": 150, "date": "2026-06-15"},
-    {"user_id": 1, "category_id": 1, "value": 120, "date": "2026-06-20"},
-    {"user_id": 3, "category_id": 1, "value": 110, "date": "2026-06-12"},
-    {"user_id": 5, "category_id": 1, "value": 95, "date": "2026-06-18"},
-    
-    # Подтягивания
-    {"user_id": 2, "category_id": 2, "value": 30, "date": "2026-06-12"}, 
-    {"user_id": 4, "category_id": 2, "value": 25, "date": "2026-06-08"},
-    {"user_id": 1, "category_id": 2, "value": 20, "date": "2026-06-18"},
-    {"user_id": 3, "category_id": 2, "value": 18, "date": "2026-06-14"},
-    
-    # Комплекс
-    {"user_id": 2, "category_id": 3, "value": 140, "date": "2026-06-15"},
-    {"user_id": 1, "category_id": 3, "value": 165, "date": "2026-06-19"},
-    {"user_id": 4, "category_id": 3, "value": 180, "date": "2026-06-11"},
 ]
 
 # Проверка на начилие категорий и создание
@@ -59,6 +41,37 @@ async def seed_categories(db: AsyncSession):
             category = Category(**cat_data)
             db.add(category)
             print(f"[SEED] Создана категория: {cat_data['name']}")
+    
+    await db.commit()
+# Создание фейковых пользователей для лидерборда
+async def seed_fake_users(db: AsyncSession):
+    """Создаёт фейковых пользователей для тестового лидерборда"""
+    for user_data in FAKE_USERS:
+        result = await db.execute(
+            select(User).where(User.username == user_data["username"])
+        )
+        existing = result.scalar_one_or_none()
+        
+        if existing:
+            # Обновляем gym_name/weight_class, если пустые
+            if not existing.gym_name:
+                existing.gym_name = user_data["gym_name"]
+                existing.weight_class = user_data["weight_class"]
+                print(f"[SEED] Обновлён пользователь: {user_data['username']}")
+            else:
+                print(f"[SEED] Пользователь уже есть: {user_data['username']}")
+        else:
+            user = User(
+                username=user_data["username"],
+                email=user_data["email"],
+                hashed_password=hash_password("123456"),
+                role="user",
+                email_verified=True,
+                gym_name=user_data["gym_name"],
+                weight_class=user_data["weight_class"]
+            )
+            db.add(user)
+            print(f"[SEED] Создан пользователь: {user_data['username']}")
     
     await db.commit()
 
@@ -116,6 +129,7 @@ async def seed_global_results(db: AsyncSession):
 async def run_seed():
     async with AsyncSessionLocal() as db:
         await seed_categories(db)
+        await seed_fake_users(db)
         await seed_global_results(db)
 
 if __name__=="__main__":

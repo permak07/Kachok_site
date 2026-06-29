@@ -9,6 +9,15 @@ async def get_leaders(db:AsyncSession,category_slug:str,limit:int=50):
     category=cat_result.scalar_one_or_none()
     if not category:
         return None
+    if category.slug in ["bench", "squat", "deadlift", "tonnage", "one_rep"]:
+        unit = "kg"
+    elif category.slug == "pullups":
+        unit = "reps"
+    elif category.slug == "complex":
+        unit = "sec"
+    else:
+        unit = ""
+
     query=(
         select(
             GlobalResult.id,
