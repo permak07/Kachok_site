@@ -6,3 +6,4 @@ class Category(Base):
 
     id=Column(Integer,primary_key=True, index=True)
     name=Column(String(50),unique=True,nullable=False,index=True)
+    slug = Column(String(30), unique=True, nullable=True)

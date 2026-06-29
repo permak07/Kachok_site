@@ -12,3 +12,6 @@ class User(Base):
     created_at=Column(DateTime,server_default=func.now())
     email_verified = Column(Boolean, default=False)
     verification_code = Column(String(10), nullable=True)
+    gym_name = Column(String(100), nullable=True)
+    city = Column(String(100), nullable=True)
+    weight_class = Column(Integer, nullable=True)
