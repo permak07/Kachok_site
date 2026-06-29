@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/profile/profile.css">
+  <link rel="stylesheet" href="../../partials/heder.css">
+  <link rel="stylesheet" href="../../partials/futer.css">
+  <link rel="stylesheet" href="../../partials/mob-futer.css">
+</head>
+<body data-page="profile" data-prof-tab="overview">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="prof-wrap">
+      <aside class="prof-side" id="prof-side"></aside>
+
+      <div class="prof-main">
+        <header class="prof-head">
+          <div class="prof-head__ava" aria-hidden="true">💪</div>
+          <div>
+            <h1 class="prof-head__name" id="prof-name">—</h1>
+            <p class="prof-head__meta" id="prof-meta">—</p>
+            <div class="prof-head__tags">
+              <span class="prof-tag prof-tag--rank">#1 в рейтинге</span>
+              <span class="prof-tag prof-tag--since" id="prof-since">Участник с —</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="prof-stats">
+          <h2 class="prof-sec-ttl">Личные показатели</h2>
+          <div class="prof-stats__grid">
+            <article class="prof-stat">
+              <strong>120 кг</strong>
+              <span>Жим лёжа</span>
+            </article>
+            <article class="prof-stat">
+              <strong class="prof-stat__plain">20 раз</strong>
+              <span>Подтягиваний</span>
+            </article>
+            <article class="prof-stat">
+              <strong class="prof-stat__plain">2:45 мин.</strong>
+              <span>комплекс</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="prof-chart">
+          <h2 class="prof-sec-ttl">Прогресс за 6 мес.</h2>
+          <div class="prof-chart__box">
+            <div class="prof-bars" aria-hidden="true">
+              <span style="height:55%"></span>
+              <span style="height:70%"></span>
+              <span style="height:62%"></span>
+              <span style="height:85%"></span>
+              <span style="height:78%"></span>
+              <span style="height:100%"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="prof-rec">
+          <h2 class="prof-sec-ttl">Рекорды</h2>
+          <ul class="prof-rec__lst">
+            <li class="prof-rec__itm">
+              <span>Жим лёжа</span>
+              <strong>120 кг</strong>
+            </li>
+            <li class="prof-rec__itm">
+              <span>Присед</span>
+              <strong>160 кг</strong>
+            </li>
+            <li class="prof-rec__itm">
+              <span>Становая</span>
+              <strong>200 кг</strong>
+            </li>
+          </ul>
+        </section>
+
+        <section class="prof-act">
+          <h2 class="prof-sec-ttl">Последняя активность</h2>
+          <ul class="prof-act__lst">
+            <li class="prof-act__itm">
+              <span class="prof-act__txt">Обновил жим лёжа — 120 кг</span>
+              <time class="prof-act__time">2 дня назад</time>
+            </li>
+            <li class="prof-act__itm">
+              <span class="prof-act__txt">Добавил подтягивания — 20 раз</span>
+              <time class="prof-act__time">5 дней назад</time>
+            </li>
+            <li class="prof-act__itm">
+              <span class="prof-act__txt">Завершил комплекс за 2:45</span>
+              <time class="prof-act__time">1 нед. назад</time>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../../js/api.js"></script>
+  <script src="../../js/layout.js"></script>
+  <script src="../../js/profile/profile-common.js"></script>
+  <script src="../../js/profile/profile.js"></script>
+</body>
+</html>

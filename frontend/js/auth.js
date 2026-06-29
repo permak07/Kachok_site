@@ -34,7 +34,7 @@ async function doLogin(form) {
   showErr(form, '');
   try {
     await api.signIn(form.email.value.trim(), form.password.value);
-    location.href = 'profile.html';
+    location.href = 'profile/profile.html';
   } catch (e) {
     showErr(form, e.message);
   }

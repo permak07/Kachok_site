@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/profile/profile.css">
+  <link rel="stylesheet" href="../../partials/heder.css">
+  <link rel="stylesheet" href="../../partials/futer.css">
+  <link rel="stylesheet" href="../../partials/mob-futer.css">
+</head>
+<body data-page="profile" data-prof-tab="history">
+  <div id="site-heder"></div>
+
+  <main class="pg">
+    <div class="prof-wrap">
+      <aside class="prof-side" id="prof-side"></aside>
+
+      <div class="prof-main">
+        <h1 class="prof-page__ttl">История</h1>
+        <p class="prof-page__lead">Все твои записи результатов. Пока демо-данные — позже подключим API.</p>
+
+        <ul class="prof-hist">
+          <li class="prof-hist__itm">
+            <div class="prof-hist__main">
+              <strong>Жим лёжа</strong>
+              <span>120 кг</span>
+            </div>
+            <time datetime="2026-06-27">27 июня 2026</time>
+            <span class="prof-hist__tag prof-hist__tag--ok">Опубликован</span>
+          </li>
+          <li class="prof-hist__itm">
+            <div class="prof-hist__main">
+              <strong>Подтягивания</strong>
+              <span>20 раз</span>
+            </div>
+            <time datetime="2026-06-24">24 июня 2026</time>
+            <span class="prof-hist__tag">Локально</span>
+          </li>
+          <li class="prof-hist__itm">
+            <div class="prof-hist__main">
+              <strong>Комплекс</strong>
+              <span>2:45 мин.</span>
+            </div>
+            <time datetime="2026-06-22">22 июня 2026</time>
+            <span class="prof-hist__tag prof-hist__tag--wait">На проверке</span>
+          </li>
+          <li class="prof-hist__itm">
+            <div class="prof-hist__main">
+              <strong>Жим лёжа</strong>
+              <span>115 кг</span>
+            </div>
+            <time datetime="2026-06-10">10 июня 2026</time>
+            <span class="prof-hist__tag">Локально</span>
+          </li>
+          <li class="prof-hist__itm">
+            <div class="prof-hist__main">
+              <strong>Присед</strong>
+              <span>160 кг</span>
+            </div>
+            <time datetime="2026-05-28">28 мая 2026</time>
+            <span class="prof-hist__tag prof-hist__tag--ok">Опубликован</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-futer"></div>
+  <div id="site-mob-fut"></div>
+  <script src="../../js/api.js"></script>
+  <script src="../../js/layout.js"></script>
+  <script src="../../js/profile/profile-common.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initProfShell);</script>
+</body>
+</html>
