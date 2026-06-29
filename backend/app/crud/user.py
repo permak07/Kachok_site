@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User
-from app.utils.security import hash_password,generate_vetification_code
-from app.utils.email import send_verification_email
+from app.utils.security import hash_password, generate_verification_code
+from app.utils.email import send_verification_email 
 
 # Поиск по email
 async def get_user_by_email(db:AsyncSession,email:str)->User|None:
@@ -25,7 +25,7 @@ async def create_user(db: AsyncSession,username:str,email:str,password:str)->Use
         username=username,
         email=email,
         hashed_password=hash_password(password),
-        verification_code=generate_vetification_code(),
+        verification_code=generate_verification_code(),
         role="user",
     )
     db.add(user)
@@ -43,3 +43,16 @@ async def verify_user_email(db:AsyncSession,email:str,code:str)->User|None:
         user.verification_code=None
         await db.commit()
     return user
+
+# Обновление профиля
+async def update_user_profile(db:AsyncSession,user_id:int,data:dict)->User|None:
+    result=await db.execute(select(User).where(User.id==user_id))
+    user=result.scalar_one_or_none()
+    if not user:
+        return None
+    for field,value in data.items():
+        if hasattr(user,field):
+            setattr(user,field,value)
+    await db.commit()
+    await db.refresh(user)
+    return user    

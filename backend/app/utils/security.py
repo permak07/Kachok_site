@@ -24,5 +24,5 @@ def create_access_token(user_id: int) -> str:
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 # Генерация кода проверки
-def generate_vetification_code()->str:
+def generate_verification_code()->str:
     return f"{random.randint(100000,999999)}"
