@@ -92,6 +92,22 @@ async function confirmUser(email, code) {
   return request(`/auth/confirm-email?${q}`, { method: 'POST' });
 }
 
+async function resendCode(email) {
+  const q = new URLSearchParams({ email });
+  return request(`/auth/resend-code?${q}`, { method: 'POST' });
+}
+
+async function getProfile() {
+  return request('/users/me/profile');
+}
+
+async function updateProfile(data) {
+  return request('/users/me/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
 async function signOut() {
   try {
     await request('/auth/logout', { method: 'POST' });
@@ -114,6 +130,9 @@ window.api = {
   registerUser,
   signIn,
   confirmUser,
+  resendCode,
+  getProfile,
+  updateProfile,
   signOut,
   requireUser,
 };

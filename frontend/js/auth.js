@@ -74,6 +74,21 @@ document.querySelector('.auth__form--reg')?.addEventListener('submit', async (e)
   }
 });
 
+document.getElementById('cnf-resend')?.addEventListener('click', async () => {
+  const email = new URLSearchParams(location.search).get('email');
+  if (!email) {
+    showCnfErr('Email не указан. Вернитесь к регистрации.');
+    return;
+  }
+  showCnfErr('');
+  try {
+    await api.resendCode(email);
+    showCnfErr('Код отправлен повторно');
+  } catch (e) {
+    showCnfErr(e.message);
+  }
+});
+
 document.getElementById('cnf-ok')?.addEventListener('click', async () => {
   const email = new URLSearchParams(location.search).get('email');
   const code = document.getElementById('cnf-code')?.value.trim();
