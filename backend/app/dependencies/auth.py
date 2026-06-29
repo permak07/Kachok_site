@@ -33,3 +33,22 @@ async def require_admin(current_user:User=Depends(get_current_user))->User:
     if current_user.role!="admin":
         raise HTTPException(status_code=403,detail="Требуются права администратора")
     return current_user
+
+# Получение данных админа
+async def get_current_admin(
+    token: str = Depends(oauth2_scheme),
+) -> dict:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Не удалось проверить учетные данные",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None or user_id != "0":
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    return {"role": "admin", "user_id": 0}

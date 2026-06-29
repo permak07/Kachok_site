@@ -15,5 +15,9 @@ class Settings:
     SMTP_USER = os.getenv("SMTP_USER")
     SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
     SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USER)
+    
+    # Admin
+    ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 settings = Settings()

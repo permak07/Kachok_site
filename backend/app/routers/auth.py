@@ -4,10 +4,12 @@ from app.core.database import get_db
 from app import crud
 from app.schemas.user import UserCreate, UserLogin, UserOut
 from app.schemas.token import Token
+from app.schemas.auth import AdminLogin, AdminLoginResponse
 from app.models.user import User
 from app.utils.security import verify_password, create_access_token,generate_verification_code
 from app.utils.email import send_verification_email
 from app.dependencies.auth import get_current_user
+from app.core.config import settings
 
 # Настройка путей в роутере
 router=APIRouter(prefix="/auth",tags=["auth"])
@@ -69,3 +71,16 @@ async def resend_code(email: str, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await send_verification_email(email, new_code)
     return {"detail": "Код отправлен"}
+
+@router.post("/admin/login", response_model=AdminLoginResponse)
+async def admin_login(data: AdminLogin):
+    if data.username != settings.ADMIN_USERNAME:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль")
+    if data.password != settings.ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль")
+    token = create_access_token(0)  # 0 = системный админ
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "role": "admin"
+    }
