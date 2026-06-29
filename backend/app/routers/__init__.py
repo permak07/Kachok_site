@@ -1,2 +1,3 @@
-from .auth import router 
-from .public import router 
+from .auth import router as auth_router
+from .public import router as public_router
+from .profile import router as profile_router

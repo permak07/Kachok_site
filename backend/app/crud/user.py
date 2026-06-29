@@ -43,3 +43,16 @@ async def verify_user_email(db:AsyncSession,email:str,code:str)->User|None:
         user.verification_code=None
         await db.commit()
     return user
+
+# Обновление профиля
+async def update_user_profile(db:AsyncSession,user_id:int,data:dict)->User|None:
+    result=await db.execute(select(User).where(User.id==user_id))
+    user=result.scalar_one_or_none()
+    if not user:
+        return None
+    for field,value in data.items():
+        if hasattr(user,field):
+            setattr(user,field,value)
+    await db.commit()
+    await db.refresh(user)
+    return user    
