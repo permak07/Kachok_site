@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import AsyncSessionLocal
-from app.seed import seed_categories
-from app.routers import auth, public, profile
+from app.seed import seed_categories,seed_global_results
+from app.routers import auth, public, profile,leaders
 
 # Создание категорий
 @asynccontextmanager
@@ -11,6 +11,7 @@ async def lifespan(app:FastAPI):
     print("[STARTUP] Запуск seed...")
     async with AsyncSessionLocal() as db:
         await seed_categories(db)
+        await seed_global_results(db)
     print("[STARTUP] Seed завершён.")
     yield
 
@@ -36,6 +37,8 @@ app.include_router(auth.router)
 app.include_router(public.router)
 # Подключение роутера профиля
 app.include_router(profile.router)
+# Подключение роутера лидерборда
+app.include_router(leaders.router)
 
 # Эндпоинт для проверки работы
 @app.get("/ping")
