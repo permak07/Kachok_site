@@ -1,8 +1,6 @@
-// один файл для всех запросов к бэку,
-//  хранения JWT в localStorage и переключения «Войти»/«Профиль» в шапке.
-
 const API = 'http://localhost:8000';
 const TOKEN_KEY = 'access_token';
+const ADMIN_TOKEN_KEY = 'admin_token';
 
 function getToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -14,6 +12,18 @@ function setToken(token) {
 
 function clearToken() {
   localStorage.removeItem(TOKEN_KEY);
+}
+
+function getAdminToken() {
+  return localStorage.getItem(ADMIN_TOKEN_KEY);
+}
+
+function setAdminToken(token) {
+  localStorage.setItem(ADMIN_TOKEN_KEY, token);
+}
+
+function clearAdminToken() {
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
 }
 
 function makeUsername(first, last) {
@@ -101,6 +111,66 @@ async function getProfile() {
   return request('/users/me/profile');
 }
 
+async function getCategories() {
+  return request('/categories');
+}
+
+async function getLeaders(category) {
+  const q = new URLSearchParams({ category });
+  return request(`/leaders?${q}`);
+}
+
+async function getIndicators(category) {
+  const q = category ? `?category=${encodeURIComponent(category)}` : '';
+  return request(`/users/me/indicators${q}`);
+}
+
+async function getResults(category) {
+  const q = new URLSearchParams({ category });
+  return request(`/users/me/results?${q}`);
+}
+
+async function createResult(body) {
+  return request('/users/me/results', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+async function deleteResult(id) {
+  return request(`/users/me/results/${id}`, { method: 'DELETE' });
+}
+
+async function adminRequest(path, options = {}) {
+  const headers = { ...options.headers };
+  if (options.body && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
+  const token = getAdminToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const res = await fetch(`${API}${path}`, { ...options, headers });
+  let data = null;
+  const text = await res.text();
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { detail: text };
+    }
+  }
+  if (!res.ok) {
+    const detail = data?.detail;
+    throw new Error(typeof detail === 'string' ? detail : 'Ошибка запроса');
+  }
+  return data;
+}
+
+async function getAdminResults(status = 'pending') {
+  const q = new URLSearchParams({ status });
+  return adminRequest(`/admin/results?${q}`);
+}
+
 async function updateProfile(data) {
   return request('/users/me/profile', {
     method: 'PATCH',
@@ -111,9 +181,7 @@ async function updateProfile(data) {
 async function signOut() {
   try {
     await request('/auth/logout', { method: 'POST' });
-  } catch {
-    /* JWT без blacklist — выход на клиенте */
-  }
+  } catch {}
   clearToken();
 }
 
@@ -121,10 +189,45 @@ async function requireUser() {
   return me();
 }
 
+async function adminSignIn(username, password) {
+  const res = await fetch(`${API}/auth/admin/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  let data = null;
+  const text = await res.text();
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { detail: text };
+    }
+  }
+  if (!res.ok) {
+    const detail = data?.detail;
+    throw new Error(typeof detail === 'string' ? detail : 'Ошибка входа');
+  }
+  setAdminToken(data.access_token);
+  return data;
+}
+
+async function requireAdmin() {
+  if (!getAdminToken()) return null;
+  return { role: 'admin' };
+}
+
+function adminSignOut() {
+  clearAdminToken();
+}
+
 window.api = {
   getToken,
   setToken,
   clearToken,
+  getAdminToken,
+  setAdminToken,
+  clearAdminToken,
   me,
   updateNav,
   registerUser,
@@ -132,7 +235,17 @@ window.api = {
   confirmUser,
   resendCode,
   getProfile,
+  getCategories,
+  getLeaders,
+  getIndicators,
+  getResults,
+  createResult,
+  deleteResult,
+  getAdminResults,
   updateProfile,
   signOut,
   requireUser,
+  adminSignIn,
+  requireAdmin,
+  adminSignOut,
 };
