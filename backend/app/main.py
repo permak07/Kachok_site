@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import AsyncSessionLocal
-from app.seed import seed_categories,seed_global_results
+from app.seed import seed_categories,seed_global_results,seed_fake_users
 from app.routers import auth, public, profile,leaders
 
 # Создание категорий
@@ -11,6 +11,7 @@ async def lifespan(app:FastAPI):
     print("[STARTUP] Запуск seed...")
     async with AsyncSessionLocal() as db:
         await seed_categories(db)
+        await seed_fake_users(db)
         await seed_global_results(db)
     print("[STARTUP] Seed завершён.")
     yield
