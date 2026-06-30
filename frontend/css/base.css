@@ -3,6 +3,20 @@
   --fnt: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --site-max: 1600px;
   --site-side: 12px;
+  --sec-dark: #232323;
+  --sec-acc: #ccff00;
+  --sec-rad: 24px;
+  --sec-glass: rgba(255, 255, 255, 0.55);
+  --sec-glass-brd: 1px solid rgba(255, 255, 255, 0.45);
+  --sec-shad: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --sec-glow: 0 0 16px rgba(204, 255, 0, 0.35);
+  --sec-bg: linear-gradient(
+    165deg,
+    #a8bac8 0%,
+    #91a5b4 30%,
+    #7d929f 65%,
+    #6e838f 100%
+  );
 }
 
 .site-wrap,
