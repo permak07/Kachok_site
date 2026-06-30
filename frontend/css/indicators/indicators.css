@@ -59,6 +59,17 @@
   color: #e85d3b;
 }
 
+.ind-empty {
+  margin: 0;
+  padding: 14px 12px;
+  font-size: 13px;
+  color: #555;
+  background: var(--ind-glass);
+  border: var(--ind-glass-brd);
+  border-radius: 12px;
+  list-style: none;
+}
+
 .ind-body {
   display: grid;
   gap: 14px;
