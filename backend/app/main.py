@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import AsyncSessionLocal
 from app.seed import seed_categories,seed_global_results,seed_fake_users
-from app.routers import auth, public, profile,leaders,results
+from app.routers import auth, public, profile,leaders,results,stats
 
 # Создание категорий
 @asynccontextmanager
@@ -42,6 +42,8 @@ app.include_router(profile.router)
 app.include_router(leaders.router)
 # Подключение роутера локальных результатов
 app.include_router(results.router)
+# Подключение роутера статистики пользователя
+app.include_router(stats.router)
 
 # Эндпоинт для проверки работы
 @app.get("/ping")
