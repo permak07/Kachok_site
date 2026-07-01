@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель — Качки в Иркутске</title>
+  <link rel="stylesheet" href="../../css/base.css">
+  <link rel="stylesheet" href="../../css/admin/admin.css">
+</head>
+<body class="adm-page">
+  <header class="adm-top">
+    <div class="adm-top__brand">
+      <img src="../../images/logo.png" alt="">
+      <span>Админ · Качки в Иркутске</span>
+    </div>
+    <button class="adm-top__out" type="button" id="adm-out">Выйти</button>
+  </header>
+
+  <div class="adm-wrap">
+    <aside class="adm-side">
+      <p class="adm-side__ttl">Разделы</p>
+      <nav id="adm-nav"></nav>
+    </aside>
+    <main class="adm-main" id="adm-main"></main>
+  </div>
+
+  <script src="../../js/api.js"></script>
+  <script src="../../js/admin/admin.js"></script>
+</body>
+</html>
