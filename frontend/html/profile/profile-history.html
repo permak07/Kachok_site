@@ -21,7 +21,9 @@
         <h1 class="prof-page__ttl">История</h1>
         <p class="prof-page__lead">Все записи результатов — жим, подтягивания, комплекс и остальное.</p>
 
-        <p class="prof-empty">Записей пока нет</p>
+        <div id="prof-hist-box">
+          <p class="prof-empty">Загрузка…</p>
+        </div>
       </div>
     </div>
   </main>
@@ -31,6 +33,6 @@
   <script src="../../js/api.js"></script>
   <script src="../../js/layout.js"></script>
   <script src="../../js/profile/profile-common.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', initProfShell);</script>
+  <script src="../../js/profile/profile-history.js"></script>
 </body>
 </html>

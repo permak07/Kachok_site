@@ -202,6 +202,56 @@
   color: #222;
 }
 
+.adm-res__info {
+  display: grid;
+  gap: 2px;
+}
+
+.adm-res__info strong {
+  font-weight: 800;
+}
+
+.adm-res__note {
+  font-size: 12px;
+  color: rgba(35, 35, 35, 0.65);
+}
+
+.adm-res__val {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.adm-res__acts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adm-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.adm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.adm-btn--ok {
+  background: var(--adm-acc);
+  color: var(--adm-dark);
+}
+
+.adm-btn--no {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
 .adm-res strong {
   font-weight: 800;
 }
