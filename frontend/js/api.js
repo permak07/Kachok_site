@@ -1,4 +1,35 @@
-const API = 'http://localhost:8000';
+const API = (() => {
+  const meta = document.querySelector('meta[name="api-base"]');
+  const fromMeta = meta?.getAttribute('content')?.trim();
+  if (fromMeta) return fromMeta.replace(/\/$/, '');
+  const host = location.hostname;
+  const isLocal = !host
+    || host === 'localhost'
+    || host === '127.0.0.1'
+    || host === '0.0.0.0'
+    || host === '[::1]';
+  if (isLocal) return 'http://127.0.0.1:8000';
+  return '';
+})();
+
+function isHtmlBody(text) {
+  return typeof text === 'string' && /^\s*</.test(text);
+}
+
+function apiErrorMessage(res, data, text) {
+  const detail = data?.detail;
+  if (typeof detail === 'string' && detail && !isHtmlBody(detail)) return detail;
+  if (Array.isArray(detail) && detail.length) return 'Проверь введённые данные';
+
+  if (res.status === 401) return 'Неверный email или пароль';
+  if (res.status === 403) return 'Доступ запрещён';
+  if (res.status === 404) return 'Сервис не найден';
+  if (res.status === 422) return 'Проверь введённые данные';
+  if (res.status === 501) return 'Сервер не настроен. Запусти бэкенд на порту 8000.';
+  if (res.status >= 500) return 'Ошибка на сервере. Попробуй позже.';
+  if (isHtmlBody(text)) return 'Не удалось связаться с сервером. Проверь, что бэкенд запущен.';
+  return 'Не удалось выполнить запрос. Попробуй позже.';
+}
 const TOKEN_KEY = 'access_token';
 const ADMIN_TOKEN_KEY = 'admin_token';
 
@@ -41,7 +72,13 @@ async function request(path, options = {}) {
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API}${path}`, { ...options, headers });
+  let res;
+  try {
+    res = await fetch(`${API}${path}`, { ...options, headers });
+  } catch {
+    throw new Error('Не удалось связаться с сервером. Проверь, что бэкенд запущен.');
+  }
+
   let data = null;
   const text = await res.text();
   if (text) {
@@ -53,9 +90,7 @@ async function request(path, options = {}) {
   }
 
   if (!res.ok) {
-    const detail = data?.detail;
-    const msg = typeof detail === 'string' ? detail : 'Ошибка запроса';
-    throw new Error(msg);
+    throw new Error(apiErrorMessage(res, data, text));
   }
   return data;
 }
@@ -115,19 +150,43 @@ async function getCategories() {
   return request('/categories');
 }
 
+let categoriesBySlug = null;
+
+async function loadCategories() {
+  if (categoriesBySlug) return categoriesBySlug;
+  const list = await getCategories();
+  categoriesBySlug = {};
+  list.forEach((c) => {
+    categoriesBySlug[c.slug] = c.id;
+  });
+  return categoriesBySlug;
+}
+
+function categoryId(slug) {
+  return categoriesBySlug?.[slug] ?? null;
+}
+
 async function getLeaders(category) {
   const q = new URLSearchParams({ category });
   return request(`/leaders?${q}`);
 }
 
-async function getIndicators(category) {
-  const q = category ? `?category=${encodeURIComponent(category)}` : '';
-  return request(`/users/me/indicators${q}`);
+async function getStats(categoryId) {
+  const q = categoryId != null ? `?category_id=${categoryId}` : '';
+  return request(`/users/me/stats${q}`);
 }
 
-async function getResults(category) {
-  const q = new URLSearchParams({ category });
-  return request(`/users/me/results?${q}`);
+async function getRecords() {
+  return request('/users/me/records');
+}
+
+async function getAchievements() {
+  return request('/users/me/achievements');
+}
+
+async function getResults(categoryId) {
+  const q = categoryId != null ? `?category_id=${categoryId}` : '';
+  return request(`/users/me/results${q}`);
 }
 
 async function createResult(body) {
@@ -137,8 +196,19 @@ async function createResult(body) {
   });
 }
 
+async function publishResult(id) {
+  return request(`/users/me/results/${id}/publish`, { method: 'POST' });
+}
+
+async function updateResult(id, body) {
+  return request(`/users/me/results/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+}
+
 async function deleteResult(id) {
-  return request(`/users/me/results/${id}`, { method: 'DELETE' });
+  await request(`/users/me/results/${id}`, { method: 'DELETE' });
 }
 
 async function adminRequest(path, options = {}) {
@@ -149,7 +219,13 @@ async function adminRequest(path, options = {}) {
   const token = getAdminToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(`${API}${path}`, { ...options, headers });
+  let res;
+  try {
+    res = await fetch(`${API}${path}`, { ...options, headers });
+  } catch {
+    throw new Error('Не удалось связаться с сервером. Проверь, что бэкенд запущен.');
+  }
+
   let data = null;
   const text = await res.text();
   if (text) {
@@ -160,15 +236,26 @@ async function adminRequest(path, options = {}) {
     }
   }
   if (!res.ok) {
-    const detail = data?.detail;
-    throw new Error(typeof detail === 'string' ? detail : 'Ошибка запроса');
+    throw new Error(apiErrorMessage(res, data, text));
   }
   return data;
+}
+
+async function getAdminOverview() {
+  return adminRequest('/admin/overview');
 }
 
 async function getAdminResults(status = 'pending') {
   const q = new URLSearchParams({ status });
   return adminRequest(`/admin/results?${q}`);
+}
+
+async function adminApproveResult(id) {
+  return adminRequest(`/admin/results/${id}/approve`, { method: 'POST' });
+}
+
+async function adminRejectResult(id) {
+  return adminRequest(`/admin/results/${id}/reject`, { method: 'POST' });
 }
 
 async function updateProfile(data) {
@@ -190,11 +277,16 @@ async function requireUser() {
 }
 
 async function adminSignIn(username, password) {
-  const res = await fetch(`${API}/auth/admin/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
+  let res;
+  try {
+    res = await fetch(`${API}/auth/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+  } catch {
+    throw new Error('Не удалось связаться с сервером. Проверь, что бэкенд запущен.');
+  }
   let data = null;
   const text = await res.text();
   if (text) {
@@ -205,8 +297,7 @@ async function adminSignIn(username, password) {
     }
   }
   if (!res.ok) {
-    const detail = data?.detail;
-    throw new Error(typeof detail === 'string' ? detail : 'Ошибка входа');
+    throw new Error(apiErrorMessage(res, data, text));
   }
   setAdminToken(data.access_token);
   return data;
@@ -236,12 +327,21 @@ window.api = {
   resendCode,
   getProfile,
   getCategories,
+  loadCategories,
+  categoryId,
   getLeaders,
-  getIndicators,
+  getStats,
+  getRecords,
+  getAchievements,
   getResults,
   createResult,
+  publishResult,
+  updateResult,
   deleteResult,
+  getAdminOverview,
   getAdminResults,
+  adminApproveResult,
+  adminRejectResult,
   updateProfile,
   signOut,
   requireUser,
