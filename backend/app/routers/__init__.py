@@ -4,3 +4,4 @@ from .profile import router as profile_router
 from .leaders import router as leaders_router
 from .results import router as results_router
 from .stats import router as stats_router
+from .records import router as records_router
