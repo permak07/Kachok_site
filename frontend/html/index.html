@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Качки в Иркутске</title>
+  <script>
+    if (!sessionStorage.getItem('kachok_seen')) {
+      location.replace('loading.html');
+    }
+  </script>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/index.css">
   <link rel="stylesheet" href="../partials/heder.css">
@@ -30,7 +35,7 @@
 
           <div class="idx-hero__chart">
             <p class="idx-lbl">Рост сообщества</p>
-            <div class="idx-bars" aria-hidden="true">
+            <div class="idx-bars">
               <span style="height:45%"></span>
               <span style="height:70%"></span>
               <span style="height:55%"></span>
@@ -158,7 +163,7 @@
         <h2 class="idx-sec-ttl">Твой <span class="idx-acc">выбор</span></h2>
         <div class="idx-cta__btns">
           <a class="idx-btn idx-btn--red" href="register.html">Присоединиться бесплатно</a>
-          <a class="idx-btn idx-btn--dark" href="leaders.html">Смотреть лидеров</a>
+          <a class="idx-btn idx-btn--dark" href="leaders/leaders.html">Смотреть лидеров</a>
           <a class="idx-btn idx-btn--acc" href="register.html">
             <span class="idx-btn__pro">PRO</span>
             <span class="idx-btn__pro-txt">Стань Профессионалом</span>

@@ -34,7 +34,7 @@ async function doLogin(form) {
   showErr(form, '');
   try {
     await api.signIn(form.email.value.trim(), form.password.value);
-    location.href = 'profile.html';
+    location.href = 'profile/profile.html';
   } catch (e) {
     showErr(form, e.message);
   }
@@ -71,6 +71,21 @@ document.querySelector('.auth__form--reg')?.addEventListener('submit', async (e)
     location.href = `confirm-email.html?email=${encodeURIComponent(email)}`;
   } catch (err) {
     showErr(form, err.message);
+  }
+});
+
+document.getElementById('cnf-resend')?.addEventListener('click', async () => {
+  const email = new URLSearchParams(location.search).get('email');
+  if (!email) {
+    showCnfErr('Email не указан. Вернитесь к регистрации.');
+    return;
+  }
+  showCnfErr('');
+  try {
+    await api.resendCode(email);
+    showCnfErr('Код отправлен повторно');
+  } catch (e) {
+    showCnfErr(e.message);
   }
 });
 
