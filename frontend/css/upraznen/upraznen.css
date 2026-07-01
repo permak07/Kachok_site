@@ -62,8 +62,22 @@
   color: #fff;
 }
 
+.ex-step--draft {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+}
+
+.ex-step--rej {
+  background: rgba(239, 68, 68, 0.22);
+  color: rgba(255, 200, 200, 0.9);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
 .ex-step--ok,
-.ex-step--pend {
+.ex-step--pend,
+.ex-step--draft,
+.ex-step--rej {
   position: relative;
   border: none;
   font: inherit;
@@ -71,12 +85,16 @@
 }
 
 .ex-step--ok:hover,
-.ex-step--pend:hover {
+.ex-step--pend:hover,
+.ex-step--draft:hover,
+.ex-step--rej:hover {
   filter: brightness(1.08);
 }
 
 .ex-step--ok::after,
-.ex-step--pend::after {
+.ex-step--pend::after,
+.ex-step--draft::after,
+.ex-step--rej::after {
   content: attr(data-ex-hint);
   position: absolute;
   left: 50%;
@@ -96,7 +114,9 @@
 }
 
 .ex-step--ok:hover::after,
-.ex-step--pend:hover::after {
+.ex-step--pend:hover::after,
+.ex-step--draft:hover::after,
+.ex-step--rej:hover::after {
   opacity: 1;
 }
 

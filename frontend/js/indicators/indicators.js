@@ -122,10 +122,14 @@ function indApplyApi(data, shell) {
 
 async function indLoadView(viewId) {
   const shell = indShell(viewId);
-  const slug = IND_CAT[viewId];
-  if (!slug && viewId !== 'all') return shell;
   try {
-    const data = await api.getIndicators(viewId === 'all' ? null : slug);
+    await api.loadCategories();
+    let categoryId = null;
+    if (viewId !== 'all') {
+      categoryId = api.categoryId(IND_CAT[viewId]);
+      if (!categoryId) return shell;
+    }
+    const data = await api.getStats(categoryId);
     return indApplyApi(data, shell);
   } catch {
     return shell;

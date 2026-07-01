@@ -103,8 +103,9 @@ async function ldrRender(viewId) {
   `;
 
   let data;
+  let me = null;
   try {
-    data = await api.getLeaders(slug);
+    [data, me] = await Promise.all([api.getLeaders(slug), api.me()]);
   } catch (e) {
     ldrShowMsg(ldrErrText(e), viewId);
     return;
@@ -112,7 +113,7 @@ async function ldrRender(viewId) {
 
   document.title = `${title} — Лидеры — Качки в Иркутске`;
 
-  const meId = data.current_user?.user_id || null;
+  const meId = data.current_user?.user_id ?? me?.id ?? null;
   const sub = viewId === 'all'
     ? `Сейчас — ${data.category.name.toLowerCase()}`
     : `Рейтинг: ${data.category.name.toLowerCase()}`;

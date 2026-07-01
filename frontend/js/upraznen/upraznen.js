@@ -70,17 +70,24 @@ function exNavHtml(viewId) {
 }
 
 function exMapResult(r) {
+  let st = 'pending';
+  if (r.status === 'approved') st = 'ok';
+  else if (r.status === 'draft') st = 'draft';
+  else if (r.status === 'rejected') st = 'rejected';
   return {
     id: r.id,
     val: r.display || String(r.value),
-    st: r.status === 'approved' ? 'ok' : 'pending',
+    st,
+    num: r.value,
   };
 }
 
 async function exFetchResults(viewId) {
   try {
-    const data = await api.getResults(EX_CAT[viewId]);
-    const list = data.results || data.items || data || [];
+    await api.loadCategories();
+    const id = api.categoryId(EX_CAT[viewId]);
+    if (!id) return [];
+    const list = await api.getResults(id);
     return Array.isArray(list) ? list.map(exMapResult) : [];
   } catch {
     return [];
@@ -106,18 +113,23 @@ function exFormatVal(viewId, raw) {
 
 function exSortResults(viewId, results) {
   return [...results].sort((a, b) => {
-    const na = exNumVal(viewId, a.val);
-    const nb = exNumVal(viewId, b.val);
+    const na = a.num ?? exNumVal(viewId, a.val);
+    const nb = b.num ?? exNumVal(viewId, b.val);
     return viewId === 'complex' ? nb - na : na - nb;
   });
 }
 
 async function exAddResult(viewId, raw, note) {
+  await api.loadCategories();
+  const categoryId = api.categoryId(EX_CAT[viewId]);
+  if (!categoryId) throw new Error('Категория не найдена');
   const val = exFormatVal(viewId, raw);
   await api.createResult({
-    category: EX_CAT[viewId],
+    category_id: categoryId,
     value: exNumVal(viewId, val),
-    note: note.trim(),
+    date: new Date().toISOString(),
+    note: note.trim() || null,
+    publish: true,
   });
 }
 
@@ -126,7 +138,10 @@ async function exRemoveResult(id) {
 }
 
 function exStepIcon(st) {
-  return st === 'ok' ? '✓' : '…';
+  if (st === 'ok') return '✓';
+  if (st === 'rejected') return '✕';
+  if (st === 'draft') return '○';
+  return '…';
 }
 
 function exLegendHtml() {
@@ -136,6 +151,13 @@ function exLegendHtml() {
   </div>`;
 }
 
+function exStepClass(st) {
+  if (st === 'ok') return 'ex-step--ok';
+  if (st === 'rejected') return 'ex-step--rej';
+  if (st === 'draft') return 'ex-step--draft';
+  return 'ex-step--pend';
+}
+
 function exStepsHtml(viewId, results) {
   if (!results.length) {
     return '<p class="ex-empty">Пока нет результатов — запиши первый</p>';
@@ -143,7 +165,7 @@ function exStepsHtml(viewId, results) {
 
   return exSortResults(viewId, results)
     .map((r) => {
-      const cls = r.st === 'ok' ? 'ex-step--ok' : 'ex-step--pend';
+      const cls = exStepClass(r.st);
       return `<button class="ex-step ${cls}" type="button" data-ex-del="${r.id}" data-ex-val="${r.val}" data-ex-hint="удалить">${exStepIcon(r.st)} ${r.val}</button>`;
     })
     .join('');
