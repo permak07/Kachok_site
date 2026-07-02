@@ -6,7 +6,7 @@ from app.seed import seed_categories,seed_global_results,seed_fake_users
 from app.routers import (auth, public, profile,
                          leaders, results,
                          stats, records, admin,
-                         achievements)
+                         achievements,activity)
 
 # Создание категорий
 @asynccontextmanager
@@ -53,6 +53,8 @@ app.include_router(records.router)
 app.include_router(admin.router)
 # Подключение роутера достижений
 app.include_router(achievements.router)
+# Подключение роутера активности
+app.include_router(activity.router)
 
 # Эндпоинт для проверки работы
 @app.get("/ping")
