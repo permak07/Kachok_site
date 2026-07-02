@@ -5,7 +5,8 @@ from app.core.database import AsyncSessionLocal
 from app.seed import seed_categories,seed_global_results,seed_fake_users
 from app.routers import (auth, public, profile,
                          leaders, results,
-                         stats, records, admin)
+                         stats, records, admin,
+                         achievements)
 
 # Создание категорий
 @asynccontextmanager
@@ -50,6 +51,8 @@ app.include_router(stats.router)
 app.include_router(records.router)
 # Подключение роутера админа
 app.include_router(admin.router)
+# Подключение роутера достижений
+app.include_router(achievements.router)
 
 # Эндпоинт для проверки работы
 @app.get("/ping")

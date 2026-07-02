@@ -6,3 +6,4 @@ from .results import router as results_router
 from .stats import router as stats_router
 from .records import router as records_router
 from .admin import router as admin_router
+from .achievements import router as achievements_router
