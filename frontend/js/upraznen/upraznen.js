@@ -56,6 +56,7 @@ const EX_VIEWS = {
 
 let exResults = [];
 let exDelId = null;
+let exLoadErr = '';
 
 function exViewId() {
   const file = location.pathname.split('/').pop().replace('.html', '');
@@ -70,10 +71,11 @@ function exNavHtml(viewId) {
 }
 
 function exMapResult(r) {
+  const status = String(r.status || '').toLowerCase();
   let st = 'pending';
-  if (r.status === 'approved') st = 'ok';
-  else if (r.status === 'draft') st = 'draft';
-  else if (r.status === 'rejected') st = 'rejected';
+  if (status === 'approved') st = 'ok';
+  else if (status === 'draft') st = 'draft';
+  else if (status === 'rejected') st = 'rejected';
   return {
     id: r.id,
     val: r.display || String(r.value),
@@ -83,21 +85,25 @@ function exMapResult(r) {
 }
 
 async function exFetchResults(viewId) {
-  try {
-    await api.loadCategories();
-    const id = api.categoryId(EX_CAT[viewId]);
-    if (!id) return [];
-    const list = await api.getResults(id);
-    return Array.isArray(list) ? list.map(exMapResult) : [];
-  } catch {
+  exLoadErr = '';
+  await api.loadCategories();
+  const id = api.categoryId(EX_CAT[viewId]);
+  if (!id) {
+    exLoadErr = 'Категория не найдена';
     return [];
   }
+  const list = await api.getResults(id);
+  return Array.isArray(list) ? list.map(exMapResult) : [];
 }
 
 function exNumVal(viewId, val) {
   if (viewId === 'complex') {
-    const parts = String(val).split(':').map((n) => parseInt(n, 10) || 0);
-    return parts[0] * 60 + (parts[1] || 0);
+    const raw = String(val).trim();
+    if (raw.includes(':')) {
+      const [m, s] = raw.split(':').map((n) => parseInt(n, 10) || 0);
+      return m * 60 + s;
+    }
+    return parseInt(raw, 10) || 0;
   }
   if (viewId === 'pull') return parseInt(String(val).replace(/\D/g, ''), 10) || 0;
   return parseFloat(String(val).replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
@@ -108,6 +114,7 @@ function exFormatVal(viewId, raw) {
   if (viewId === 'complex') return t;
   if (viewId === 'pull') return `${parseInt(t, 10) || t}`;
   const n = parseFloat(t.replace(',', '.'));
+  if (!n || n <= 0) throw new Error('Введи положительное число');
   return `${n} кг`;
 }
 
@@ -124,10 +131,12 @@ async function exAddResult(viewId, raw, note) {
   const categoryId = api.categoryId(EX_CAT[viewId]);
   if (!categoryId) throw new Error('Категория не найдена');
   const val = exFormatVal(viewId, raw);
+  const value = exNumVal(viewId, raw);
+  if (!value || value <= 0) throw new Error('Введи корректное значение');
   await api.createResult({
     category_id: categoryId,
-    value: exNumVal(viewId, val),
-    date: new Date().toISOString(),
+    value,
+    date: new Date().toISOString().slice(0, 19),
     note: note.trim() || null,
     publish: true,
   });
@@ -148,6 +157,7 @@ function exLegendHtml() {
   return `<div class="ex-leg">
     <span class="ex-leg__it ex-leg__it--pend"><i></i> на модерации</span>
     <span class="ex-leg__it ex-leg__it--ok"><i></i> подтверждён</span>
+    <span class="ex-leg__it ex-leg__it--rej"><i></i> отклонён</span>
   </div>`;
 }
 
@@ -159,6 +169,9 @@ function exStepClass(st) {
 }
 
 function exStepsHtml(viewId, results) {
+  if (exLoadErr) {
+    return `<p class="ex-empty ex-empty--err">${exLoadErr}</p>`;
+  }
   if (!results.length) {
     return '<p class="ex-empty">Пока нет результатов — запиши первый</p>';
   }
@@ -206,6 +219,7 @@ function exModalsHtml() {
             <input type="checkbox" id="ex-rec-honest">
             <span>Подтверждаю — выполнил честно</span>
           </label>
+          <p class="ex-modal__err" id="ex-rec-err" hidden></p>
           <p class="ex-modal__note">Результат уйдёт админу на проверку. Пока он оранжевый — на модерации.</p>
           <div class="ex-modal__acts">
             <button class="ex-modal__btn ex-modal__btn--sec" type="button" data-ex-close="rec">Отмена</button>
@@ -257,9 +271,17 @@ function exBindModals(viewId, v) {
   const recNote = document.getElementById('ex-rec-note');
   const recHonest = document.getElementById('ex-rec-honest');
   const recSend = document.getElementById('ex-rec-send');
+  const recErr = document.getElementById('ex-rec-err');
   const field = exRecField(viewId);
 
+  const showRecErr = (msg) => {
+    if (!recErr) return;
+    recErr.textContent = msg || '';
+    recErr.hidden = !msg;
+  };
+
   const openRec = () => {
+    showRecErr('');
     document.getElementById('ex-rec-ttl').textContent = 'Записать результат';
     document.getElementById('ex-rec-sub').textContent = v.cardTitle || v.sub || v.head.join(' ');
     document.getElementById('ex-rec-lbl').textContent = field.lbl;
@@ -302,13 +324,14 @@ function exBindModals(viewId, v) {
     e.preventDefault();
     if (!recHonest.checked) return;
     recSend.disabled = true;
+    showRecErr('');
     try {
       await exAddResult(viewId, recVal.value, recNote.value);
       exModalClose('ex-rec-dlg');
       await exRender(viewId);
     } catch (err) {
-      recSend.disabled = false;
-      alert(err.message || 'Не удалось сохранить');
+      showRecErr(err.message || 'Не удалось сохранить');
+      recSend.disabled = !recHonest.checked;
     }
   };
 
@@ -375,7 +398,13 @@ async function exRender(viewId) {
   document.getElementById('ex-root').innerHTML = exRenderHtml(v, viewId, []);
   document.querySelector('.ex-steps').innerHTML = '<p class="ex-empty">Загрузка…</p>';
 
-  exResults = await exFetchResults(viewId);
+  try {
+    exResults = await exFetchResults(viewId);
+  } catch (err) {
+    exLoadErr = err.message || 'Не удалось загрузить';
+    exResults = [];
+  }
+
   document.getElementById('ex-root').innerHTML = exRenderHtml(v, viewId, exResults);
   exBindModals(viewId, v);
 }

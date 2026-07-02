@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const login = form.login.value.trim();
     const password = form.password.value;
     try {
+      api.clearAdminToken();
       await api.adminSignIn(login, password);
+      await api.getAdminOverview();
       location.href = 'admin/admin.html';
     } catch (err) {
       showAdminErr(form, err.message);

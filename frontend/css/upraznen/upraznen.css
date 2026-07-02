@@ -151,6 +151,10 @@
   background: linear-gradient(180deg, #d4ff33 0%, #ccff00 100%);
 }
 
+.ex-leg__it--rej i {
+  background: #ef4444;
+}
+
 .ex-empty {
   margin: 0;
   padding: 14px 12px;
@@ -158,6 +162,11 @@
   color: rgba(255, 255, 255, 0.55);
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
+}
+
+.ex-empty--err {
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.15);
 }
 
 .ex-actions {
@@ -367,4 +376,11 @@ body.ex-modal-opn {
 .ex-modal__btn--danger {
   background: #dc2626;
   color: #fff;
+}
+
+.ex-modal__err {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fecaca;
 }

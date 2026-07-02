@@ -192,7 +192,7 @@
 
 .adm-res {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
@@ -200,6 +200,12 @@
   border-radius: 14px;
   font-size: 14px;
   color: #222;
+}
+
+@media (min-width: 640px) {
+  .adm-res {
+    grid-template-columns: 1fr auto auto;
+  }
 }
 
 .adm-res__info {
@@ -254,4 +260,32 @@
 
 .adm-res strong {
   font-weight: 800;
+}
+
+.adm-toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  max-width: min(420px, calc(100vw - 32px));
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(35, 35, 35, 0.95);
+  border: 1px solid rgba(204, 255, 0, 0.35);
+  color: var(--adm-acc);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.adm-toast[hidden] {
+  display: none;
+}
+
+.adm-toast--err {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fecaca;
 }

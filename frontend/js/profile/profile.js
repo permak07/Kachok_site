@@ -4,16 +4,9 @@ const PROF_STAT_CATS = [
   { slug: 'bench', label: 'Жим лёжа', plain: false },
   { slug: 'pullups', label: 'Подтягиваний', plain: true },
   { slug: 'complex', label: 'комплекс', plain: true },
+  { slug: 'one_rep', label: 'Жим на раз', plain: false },
+  { slug: 'tonnage', label: 'Тоннаж', plain: false },
 ];
-
-const PROF_BADGE_ICO = {
-  medal: 'icon-badge-medal.svg',
-  record: 'icon-badge-record.svg',
-  top: 'icon-badge-top.svg',
-  streak: 'icon-badge-streak.svg',
-  gym: 'icon-badge-gym.svg',
-  crown: 'icon-badge-crown.svg',
-};
 
 function profName(username) {
   const [a, b] = username.split('_');
@@ -29,29 +22,20 @@ function profMeta(profile) {
   return parts.join(' · ');
 }
 
-function profFmtDate(iso) {
-  if (!iso) return '';
-  return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-}
-
 function profSetEmpty(el, text) {
   if (!el) return;
   el.innerHTML = `<p class="prof-empty">${text}</p>`;
 }
 
-function profRenderStats(records) {
+function profRenderStats(cards) {
   const grid = document.getElementById('prof-stats-grid');
   if (!grid) return;
 
-  const map = {};
-  if (Array.isArray(records)) {
-    records.forEach((r) => {
-      if (r.category_slug) map[r.category_slug] = r.display || String(r.value);
-    });
-  }
+  const map = cards && typeof cards === 'object' ? cards : {};
 
   grid.innerHTML = PROF_STAT_CATS.map((c) => {
-    const val = map[c.slug] || PROF_EMPTY;
+    const card = map[c.slug];
+    const val = card?.val || PROF_EMPTY;
     const cls = c.plain ? ' class="prof-stat__plain"' : '';
     return `<article class="prof-stat">
       <strong${cls}>${val}</strong>
@@ -93,19 +77,15 @@ function profRenderActivity(list) {
   const sec = document.getElementById('prof-act-box');
   if (!sec) return;
 
-  const rows = Array.isArray(list)
-    ? [...list].sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date)).slice(0, 5)
-    : [];
-
-  if (!rows.length) {
+  if (!Array.isArray(list) || !list.length) {
     profSetEmpty(sec, 'Пока пусто');
     return;
   }
 
-  sec.innerHTML = `<ul class="prof-act__lst">${rows.map((r) => `
+  sec.innerHTML = `<ul class="prof-act__lst">${list.map((r) => `
     <li class="prof-act__itm">
-      <div class="prof-act__txt">${r.category_name || '—'}: ${r.display || r.value}</div>
-      <time class="prof-act__time">${profFmtDate(r.created_at || r.date)}</time>
+      <div class="prof-act__txt">${r.title || '—'}</div>
+      <time class="prof-act__time">${r.dateLbl || r.date || ''}</time>
     </li>`).join('')}</ul>`;
 }
 
@@ -131,16 +111,22 @@ async function initProfile() {
     sinceEl.textContent = `Участник с ${new Date(profile.created_at).getFullYear()}`;
   }
 
-  const [records, stats, activity] = await Promise.allSettled([
-    api.getRecords(),
+  await api.loadCategories();
+  const benchId = api.categoryId('bench');
+
+  const [statsRes, chartRes, recordsRes, activityRes] = await Promise.allSettled([
     api.getStats(null),
-    api.getResults(),
+    benchId != null ? api.getStats(benchId) : Promise.resolve(null),
+    api.getRecords(),
+    api.getActivity(5),
   ]);
 
-  profRenderStats(records.status === 'fulfilled' ? records.value : null);
-  profRenderChart(stats.status === 'fulfilled' ? stats.value : null);
-  profRenderRecords(records.status === 'fulfilled' ? records.value : null);
-  profRenderActivity(activity.status === 'fulfilled' ? activity.value : null);
+  const stats = statsRes.status === 'fulfilled' ? statsRes.value : null;
+  const chartStats = chartRes.status === 'fulfilled' ? chartRes.value : null;
+  profRenderStats(stats?.cards);
+  profRenderChart(chartStats);
+  profRenderRecords(recordsRes.status === 'fulfilled' ? recordsRes.value : null);
+  profRenderActivity(activityRes.status === 'fulfilled' ? activityRes.value : null);
 }
 
 document.addEventListener('DOMContentLoaded', initProfile);

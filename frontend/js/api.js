@@ -28,6 +28,7 @@ function apiErrorMessage(res, data, text) {
   if (res.status === 501) return 'Сервер не настроен. Запусти бэкенд на порту 8000.';
   if (res.status >= 500) return 'Ошибка на сервере. Попробуй позже.';
   if (isHtmlBody(text)) return 'Не удалось связаться с сервером. Проверь, что бэкенд запущен.';
+  if (typeof text === 'string' && text.trim() && !data?.detail) return text.trim();
   return 'Не удалось выполнить запрос. Попробуй позже.';
 }
 const TOKEN_KEY = 'access_token';
@@ -184,6 +185,11 @@ async function getAchievements() {
   return request('/users/me/achievements');
 }
 
+async function getActivity(limit = 10) {
+  const q = new URLSearchParams({ limit: String(limit) });
+  return request(`/users/me/activity?${q}`);
+}
+
 async function getResults(categoryId) {
   const q = categoryId != null ? `?category_id=${categoryId}` : '';
   return request(`/users/me/results${q}`);
@@ -236,6 +242,10 @@ async function adminRequest(path, options = {}) {
     }
   }
   if (!res.ok) {
+    if (res.status === 401) {
+      clearAdminToken();
+      throw new Error('Сессия администратора истекла. Войди снова через форму входа.');
+    }
     throw new Error(apiErrorMessage(res, data, text));
   }
   return data;
@@ -305,7 +315,13 @@ async function adminSignIn(username, password) {
 
 async function requireAdmin() {
   if (!getAdminToken()) return null;
-  return { role: 'admin' };
+  try {
+    await getAdminOverview();
+    return { role: 'admin' };
+  } catch {
+    clearAdminToken();
+    return null;
+  }
 }
 
 function adminSignOut() {
@@ -333,6 +349,7 @@ window.api = {
   getStats,
   getRecords,
   getAchievements,
+  getActivity,
   getResults,
   createResult,
   publishResult,

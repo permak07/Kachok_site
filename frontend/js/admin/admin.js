@@ -1,7 +1,6 @@
 const ADM_NAV = [
   { id: 'overview', label: 'Обзор' },
   { id: 'results', label: 'Модерация' },
-  { id: 'users', label: 'Пользователи' },
 ];
 
 const ADM_VIEWS = {
@@ -14,14 +13,10 @@ const ADM_VIEWS = {
     sub: 'Одобрение записей атлетов',
     empty: 'Нет записей на модерации',
   },
-  users: {
-    title: 'Пользователи',
-    sub: 'Список зарегистрированных атлетов',
-    empty: 'Список пользователей пока недоступен',
-  },
 };
 
 let admViewId = 'overview';
+let admToastTimer = null;
 
 function admNavHtml(viewId) {
   return ADM_NAV.map((item) => {
@@ -35,6 +30,21 @@ function admHeadHtml(v) {
     <h1 class="adm-head__ttl">${v.title}</h1>
     <p class="adm-head__sub">${v.sub}</p>
   </header>`;
+}
+
+function admToast(msg, isErr) {
+  let el = document.getElementById('adm-toast');
+  if (!el) {
+    el = document.createElement('p');
+    el.id = 'adm-toast';
+    el.className = 'adm-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.toggle('adm-toast--err', !!isErr);
+  el.hidden = false;
+  clearTimeout(admToastTimer);
+  admToastTimer = setTimeout(() => { el.hidden = true; }, 4500);
 }
 
 function admOverviewHtml(cards) {
@@ -74,9 +84,13 @@ function admBindResults(list) {
       btn.disabled = true;
       try {
         await api.adminApproveResult(Number(btn.dataset.admOk));
+        admToast('Результат одобрен');
         await admRender(admViewId);
       } catch (err) {
-        alert(err.message || 'Не удалось одобрить');
+        admToast(err.message || 'Не удалось одобрить', true);
+        if (/войди снова/i.test(err.message || '')) {
+          setTimeout(() => { location.href = '../login-admin.html'; }, 1200);
+        }
         btn.disabled = false;
       }
     };
@@ -87,15 +101,17 @@ function admBindResults(list) {
       btn.disabled = true;
       try {
         await api.adminRejectResult(Number(btn.dataset.admNo));
+        admToast('Результат отклонён');
         await admRender(admViewId);
       } catch (err) {
-        alert(err.message || 'Не удалось отклонить');
+        admToast(err.message || 'Не удалось отклонить', true);
+        if (/войди снова/i.test(err.message || '')) {
+          setTimeout(() => { location.href = '../login-admin.html'; }, 1200);
+        }
         btn.disabled = false;
       }
     };
   });
-
-  if (!list.length) return;
 }
 
 async function admLoadOverview() {
@@ -105,26 +121,11 @@ async function admLoadOverview() {
     { lbl: 'Категории', val: '—' },
   ];
 
-  try {
-    const o = await api.getAdminOverview();
-    if (o.users != null) cards[0].val = String(o.users);
-    if (o.pending != null) cards[1].val = String(o.pending);
-    if (o.categories != null) cards[2].val = String(o.categories);
-    return cards;
-  } catch {
-    const tasks = await Promise.allSettled([
-      api.getAdminResults('pending'),
-      api.getCategories(),
-    ]);
-    if (tasks[0].status === 'fulfilled') {
-      const list = Array.isArray(tasks[0].value) ? tasks[0].value : [];
-      cards[1].val = String(list.length);
-    }
-    if (tasks[1].status === 'fulfilled') {
-      cards[2].val = String(tasks[1].value.length);
-    }
-    return cards;
-  }
+  const o = await api.getAdminOverview();
+  if (o.users != null) cards[0].val = String(o.users);
+  if (o.pending != null) cards[1].val = String(o.pending);
+  if (o.categories != null) cards[2].val = String(o.categories);
+  return cards;
 }
 
 async function admRender(viewId) {
@@ -137,26 +138,27 @@ async function admRender(viewId) {
     btn.classList.toggle('is-active', btn.dataset.view === viewId);
   });
 
-  if (viewId === 'overview') {
-    const cards = await admLoadOverview();
-    admSetMain(`${admHeadHtml(v)}${admOverviewHtml(cards)}`);
-    return;
-  }
-
-  if (viewId === 'results') {
-    let list = [];
-    try {
-      const data = await api.getAdminResults('pending');
-      list = Array.isArray(data) ? data : [];
-    } catch {
-      list = [];
+  try {
+    if (viewId === 'overview') {
+      const cards = await admLoadOverview();
+      admSetMain(`${admHeadHtml(v)}${admOverviewHtml(cards)}`);
+      return;
     }
-    admSetMain(`${admHeadHtml(v)}${admResultsHtml(list)}`);
-    admBindResults(list);
-    return;
-  }
 
-  admSetMain(`${admHeadHtml(v)}<p class="adm-empty">${v.empty}</p>`);
+    if (viewId === 'results') {
+      const data = await api.getAdminResults('pending');
+      const list = Array.isArray(data) ? data : [];
+      admSetMain(`${admHeadHtml(v)}${admResultsHtml(list)}`);
+      admBindResults(list);
+    }
+  } catch (err) {
+    admToast(err.message || 'Ошибка загрузки', true);
+    if (/войди снова/i.test(err.message || '')) {
+      setTimeout(() => { location.href = '../login-admin.html'; }, 1200);
+      return;
+    }
+    admSetMain(`${admHeadHtml(v)}<p class="adm-empty">${err.message || 'Не удалось загрузить данные'}</p>`);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
