@@ -4,7 +4,8 @@ from app.models.global_result import GlobalResult
 from app.models.category import Category
 from app.models.user import User
 
-async def get_leaders(db:AsyncSession,category_slug:str,limit:int=50):
+# Получение списка лидеров и поиск user в списке
+async def get_leaders(db:AsyncSession,category_slug:str,current_user_id: int | None = None,limit:int=50):
     cat_result=await db.execute(select(Category).where(Category.slug==category_slug))
     category=cat_result.scalar_one_or_none()
     if not category:
@@ -62,6 +63,14 @@ async def get_leaders(db:AsyncSession,category_slug:str,limit:int=50):
             "unit": unit,
             "display": display 
         })
+
+    current_user_data = None
+    if current_user_id:
+        for leader in leaders:
+            if leader["user_id"] == current_user_id:
+                current_user_data = leader
+                break
+    
     return {
         "category": {
             "id": category.id,
@@ -70,5 +79,6 @@ async def get_leaders(db:AsyncSession,category_slug:str,limit:int=50):
             "unit": unit,
         },
         "podium": leaders[:3] if len(leaders) >= 3 else leaders,
-        "table": leaders[3:] if len(leaders) >= 3 else []
+        "table": leaders[3:] if len(leaders) >= 3 else [],
+        "current_user": current_user_data
     }

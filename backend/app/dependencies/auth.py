@@ -52,3 +52,22 @@ async def get_current_admin(
         raise credentials_exception
     
     return {"role": "admin", "user_id": 0}
+
+# Нужно для того чтобы не кидало ошибку 401
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
+# Возвращает пользователя, если токен валиден
+async def get_current_user_optional(
+    token: str | None = Depends(oauth2_scheme_optional),
+    db: AsyncSession = Depends(get_db)) -> User | None:
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            return None
+    except JWTError:
+        return None
+    
+    user = await get_user_by_id(db, int(user_id))
+    return user
