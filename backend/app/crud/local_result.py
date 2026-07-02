@@ -14,6 +14,8 @@ async def create_result(
     note: str | None = None,
     publish: bool = False
     ) -> LocalResult:
+    if date.tzinfo is not None:
+        date = date.replace(tzinfo=None)
     # Определяем статус
     status=ResultStatus.PENDING if publish else ResultStatus.DRAFT
 
